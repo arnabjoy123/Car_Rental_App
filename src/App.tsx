@@ -6,6 +6,7 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   StatusBar,
   StyleSheet,
@@ -17,6 +18,45 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import Home from './screens/Home';
+import Profile from './screens/Profile';
+import { createStaticNavigation } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Bookings from './screens/Bookings';
+import Onboarding from './screens/Onboarding';
+// import Feather from 'react-native-vector-icons';
+
+const MyTabs = createBottomTabNavigator({
+  screens: {
+    Home: {
+      screen: Home,
+      options: {
+        tabBarLabel: 'Home',
+        // tabBarIcon: ({ color, size }) => (
+        //   // <Feather name="home" color={color} size={size} />
+        // ),
+      },
+    },
+    Bookings: Bookings,
+    Profile: Profile,
+  },
+});
+
+const RootStack = createNativeStackNavigator({
+  initialRouteName: 'Onboarding',
+  screens: {
+    Onboarding: {
+      screen: Onboarding,
+      options: { title: 'Welcome' },
+    },
+    MainTabs: {
+      screen: MyTabs,
+      options: { headerShown: false },
+    },
+  },
+});
+
+const Navigation = createStaticNavigation(RootStack);
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -24,7 +64,8 @@ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      {/* <AppContent /> */}
+      <Navigation />
     </SafeAreaProvider>
   );
 }
