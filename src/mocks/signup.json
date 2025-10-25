@@ -1,0 +1,5 @@
+{
+  "loggedIn": true,
+  "user": { "id": 2, "name": "Jane Doe", "email": "jane@example.com" },
+  "expiresAt": 1710000000000
+}

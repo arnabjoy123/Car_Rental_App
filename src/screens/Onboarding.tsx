@@ -35,7 +35,7 @@ const Onboarding = () => {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.replace('MainTabs')}
+            onPress={() => navigation.replace('Login')}
           >
             <Text style={styles.buttonText}>Lets Begin!</Text>
           </TouchableOpacity>
