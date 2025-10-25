@@ -6,6 +6,7 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   StatusBar,
   StyleSheet,
@@ -17,6 +18,16 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import Home from './screens/Home';
+import Profile from './screens/Profile';
+import {
+  createStaticNavigation,
+  NavigationContainer,
+} from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Bookings from './screens/Bookings';
+import Onboarding from './screens/Onboarding';
+import { RootNavigator } from './navigation';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -24,34 +35,11 @@ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hiiiii</Text>
-      {/* <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      /> */}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'blue',
-  },
-  text: {
-    color: 'white',
-    fontSize: 60,
-  },
-});
 
 export default App;
