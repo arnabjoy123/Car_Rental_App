@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import mockresponse from '../mocks/login.json';
 import {
   View,
   Text,
@@ -7,19 +8,44 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { ActivityIndicator } from 'react-native';
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Add your login logic here
-    navigation.replace('MainTabs');
-    console.log('Login pressed', { email, password });
-  };
+  const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: Yup.object({
+      email: Yup.string().email('Invalid email').required('Required'),
+      password: Yup.string().min(6, 'Too short').required('Required'),
+    }),
+    onSubmit: async values => {
+      console.log(values);
+
+      try {
+        setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        const response = mockresponse;
+
+        if (values.email === mockresponse.user.email) {
+          Alert.alert(`Welcome ${response.user.name}!`);
+          navigation.replace('MainTabs');
+        } else {
+          throw new Error('Invalid credentials');
+        }
+      } catch (error) {
+        Alert.alert(`Something went wrong`);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
   return (
     <KeyboardAvoidingView
@@ -31,22 +57,43 @@ const Login = () => {
       <TextInput
         style={styles.input}
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        value={formik.values.email}
+        onChangeText={formik.handleChange('email')}
+        onBlur={formik.handleBlur('email')}
         keyboardType="email-address"
         autoCapitalize="none"
       />
 
+      {formik.touched.email && formik.errors.email && (
+        <Text style={styles.error}>{formik.errors.email}</Text>
+      )}
+
       <TextInput
         style={styles.input}
         placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
+        value={formik.values.password}
+        onChangeText={formik.handleChange('password')}
+        onBlur={formik.handleBlur('password')}
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
+      {formik.touched.password && formik.errors.password && (
+        <Text style={styles.error}>{formik.errors.password}</Text>
+      )}
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          console.log('Button pressed');
+          formik.handleSubmit();
+        }}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.buttonText}>Log In</Text>
+        )}
       </TouchableOpacity>
 
       <View style={styles.footer}>
@@ -111,5 +158,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontWeight: '600',
+  },
+  error: {
+    color: 'red',
+    fontSize: 14,
+    fontWeight: '600',
+    paddingBottom: 5,
   },
 });

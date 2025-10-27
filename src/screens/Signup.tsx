@@ -1,26 +1,38 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
-  KeyboardAvoidingView, 
-  Platform 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Signup = () => {
   const navigation = useNavigation();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleSignup = () => {
-    // Add your signup logic here
-    console.log('Signup pressed', { name, email, password });
-    navigation.replace('MainTabs'); // Navigate to MainTabs after signup
-  };
+  const formik = useFormik({
+    initialValues: { name: '', email: '', password: '' },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .min(3, 'Name must be at least 3 characters')
+        .max(30, 'Name must be 30 characters or less')
+        .required('Name is required'),
+      email: Yup.string().email('Invalid email').required('Required'),
+      password: Yup.string().min(6, 'Too short').required('Required'),
+    }),
+    onSubmit: values => {
+      console.log(values);
+      console.log('Hii');
+      console.log(formik.errors);
+
+      navigation.replace('MainTabs');
+    },
+  });
 
   return (
     <KeyboardAvoidingView
@@ -32,16 +44,17 @@ const Signup = () => {
       <TextInput
         style={styles.input}
         placeholder="Full Name"
-        value={name}
-        onChangeText={setName}
+        value={formik.values.name}
+        onChangeText={formik.handleChange('name')}
         autoCapitalize="words"
       />
 
       <TextInput
         style={styles.input}
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        value={formik.values.email}
+        onChangeText={formik.handleChange('email')}
+        onBlur={formik.handleBlur('email')}
         keyboardType="email-address"
         autoCapitalize="none"
       />
@@ -49,12 +62,12 @@ const Signup = () => {
       <TextInput
         style={styles.input}
         placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
+        value={formik.values.password}
+        onChangeText={formik.handleChange('password')}
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+      <TouchableOpacity style={styles.button} onPress={formik.handleSubmit}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
