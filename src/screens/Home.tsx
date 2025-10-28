@@ -11,26 +11,15 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import data from '../mocks/cars.json';
 import { useSelector } from 'react-redux';
+import CarCard from '../components/CarCard';
 
 const Home = () => {
   const navigation = useNavigation();
   const { user } = useSelector(state => state.auth);
 
-  const renderCarItem = ({ item }) => (
-    <View style={styles.card}>
-      <Image source={{ uri: item.images[0] }} style={styles.image} />
-      <Text style={styles.title}>
-        {item.make} {item.model} ({item.year})
-      </Text>
-      <Text style={styles.details}>
-        Seats: {item.seats} | Transmission: {item.transmission}
-      </Text>
-      <Text style={styles.price}>${item.pricePerDay} / day</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>View Details</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const renderCarItem = ({ item }) => {
+    return <CarCard item={item} />;
+  };
 
   return (
     <View style={styles.container}>
@@ -94,7 +83,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFA001',
+    color: '#ff0101ff',
     marginBottom: 8,
   },
   buttonText: {
