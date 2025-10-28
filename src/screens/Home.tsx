@@ -10,9 +10,11 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import data from '../mocks/cars.json';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const navigation = useNavigation();
+  const { user } = useSelector(state => state.auth);
 
   const renderCarItem = ({ item }) => (
     <View style={styles.card}>
@@ -32,6 +34,9 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headCont}>
+        <Text style={styles.headText}>Welcome {user?.name}</Text>
+      </View>
       <FlatList
         data={data}
         keyExtractor={item => item.id.toString()}
@@ -45,6 +50,14 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  headCont: {
+    height: 50,
+  },
+  headText: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: '600',
+  },
   container: {
     flex: 1,
     paddingHorizontal: 16,

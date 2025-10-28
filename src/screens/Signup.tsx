@@ -7,13 +7,17 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { signupUser } from '../store/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 const Signup = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: { name: '', email: '', password: '' },
@@ -25,12 +29,19 @@ const Signup = () => {
       email: Yup.string().email('Invalid email').required('Required'),
       password: Yup.string().min(6, 'Too short').required('Required'),
     }),
-    onSubmit: values => {
-      console.log(values);
-      console.log('Hii');
-      console.log(formik.errors);
+    onSubmit: async values => {
+      try {
+        const resultAction = await dispatch(signupUser(values));
 
-      navigation.replace('MainTabs');
+        if (signupUser.fulfilled.match(resultAction)) {
+          Alert.alert('Success', 'Account created successfully!');
+          navigation.replace('MainTabs');
+        } else {
+          throw new Error(resultAction.error.message);
+        }
+      } catch (error) {
+        Alert.alert('Error', error.message || 'Something went wrong');
+      }
     },
   });
 
