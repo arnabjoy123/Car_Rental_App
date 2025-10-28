@@ -14,10 +14,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../store/slices/authSlice';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
@@ -26,23 +29,13 @@ const Login = () => {
       password: Yup.string().min(6, 'Too short').required('Required'),
     }),
     onSubmit: async values => {
-      console.log(values);
+      const resultAction = await dispatch(loginUser(values));
 
-      try {
-        setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const response = mockresponse;
-
-        if (values.email === mockresponse.user.email) {
-          Alert.alert(`Welcome ${response.user.name}!`);
-          navigation.replace('MainTabs');
-        } else {
-          throw new Error('Invalid credentials');
-        }
-      } catch (error) {
-        Alert.alert(`Something went wrong`);
-      } finally {
-        setLoading(false);
+      if (loginUser.fulfilled.match(resultAction)) {
+        Alert.alert(`Welcome ${resultAction.payload.user.name}!`);
+        navigation.replace('MainTabs');
+      } else {
+        Alert.alert('Invalid credentials');
       }
     },
   });

@@ -4,19 +4,20 @@ import { mockLogin, mockSignup } from '../../services/apiService';
 // Async thunks
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async (credentials) => {
-    const response = await mockLogin(credentials);
-    return response;
-  }
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await mockLogin(credentials);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
 );
 
-export const signupUser = createAsyncThunk(
-  'auth/signupUser',
-  async (data) => {
-    const response = await mockSignup(data);
-    return response;
-  }
-);
+export const signupUser = createAsyncThunk('auth/signupUser', async data => {
+  const response = await mockSignup(data);
+  return response;
+});
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   // No storage now, just reset state
@@ -34,10 +35,10 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       // Login
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUser.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -53,7 +54,7 @@ const authSlice = createSlice({
       })
 
       // Signup
-      .addCase(signupUser.pending, (state) => {
+      .addCase(signupUser.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -69,7 +70,7 @@ const authSlice = createSlice({
       })
 
       // Logout
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutUser.fulfilled, state => {
         state.loggedIn = false;
         state.user = null;
         state.expiresAt = null;
