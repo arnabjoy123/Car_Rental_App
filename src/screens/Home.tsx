@@ -1,38 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
-  Button,
   FlatList,
-  Image,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import data from '../mocks/cars.json';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CarCard from '../components/CarCard';
-import { MMKV } from 'react-native-mmkv';
+import { fetchCars } from '../store/slices/carsSlice';
 
 const Home = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
+  const { list, loading } = useSelector(state => state.cars);
 
-  console.log('hiii');
+  useEffect(() => {
+    dispatch(fetchCars()); 
+  }, [dispatch]);
 
-  const storage = new MMKV();
-  storage.set('user.name', 'Marc');
-  storage.set('user.age', 21);
-  storage.set('is-mmkv-fast-asf', true);
-
-  const username = storage.getString('user.name'); // 'Marc'
-  const age = storage.getNumber('user.age'); // 21
-  const isMmkvFastAsf = storage.getBoolean('is-mmkv-fast-asf'); // true
-
-  console.log(username);
-  console.log(age);
-  console.log(isMmkvFastAsf);
-  
   const renderCarItem = ({ item }) => {
     return <CarCard item={item} />;
   };
@@ -43,7 +30,7 @@ const Home = () => {
         <Text style={styles.headText}>Welcome {user?.name}</Text>
       </View>
       <FlatList
-        data={data}
+        data={list}
         keyExtractor={item => item.id.toString()}
         renderItem={renderCarItem}
         contentContainerStyle={{ paddingBottom: 16 }}
