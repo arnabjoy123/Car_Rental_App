@@ -12,11 +12,27 @@ import { useNavigation } from '@react-navigation/native';
 import data from '../mocks/cars.json';
 import { useSelector } from 'react-redux';
 import CarCard from '../components/CarCard';
+import { MMKV } from 'react-native-mmkv';
 
 const Home = () => {
   const navigation = useNavigation();
   const { user } = useSelector(state => state.auth);
 
+  console.log('hiii');
+
+  const storage = new MMKV();
+  storage.set('user.name', 'Marc');
+  storage.set('user.age', 21);
+  storage.set('is-mmkv-fast-asf', true);
+
+  const username = storage.getString('user.name'); // 'Marc'
+  const age = storage.getNumber('user.age'); // 21
+  const isMmkvFastAsf = storage.getBoolean('is-mmkv-fast-asf'); // true
+
+  console.log(username);
+  console.log(age);
+  console.log(isMmkvFastAsf);
+  
   const renderCarItem = ({ item }) => {
     return <CarCard item={item} />;
   };
