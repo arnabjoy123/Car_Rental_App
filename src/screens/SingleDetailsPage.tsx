@@ -17,7 +17,7 @@ const { width } = Dimensions.get('window');
 
 const SingleDetailsPage = () => {
   const route = useRoute();
-  const { car } = route.params;
+  const { car } = route.params; 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const navigation = useNavigation();
 
