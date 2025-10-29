@@ -3,17 +3,30 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home';
 import Bookings from '../screens/Bookings';
 import Profile from '../screens/Profile';
+import Feather from 'react-native-vector-icons/Feather';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: true,
+      screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarActiveTintColor: '#FFA001',
         tabBarInactiveTintColor: '#CDCDE0',
-      }}
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') iconName = 'home';
+          else if (route.name === 'Bookings') iconName = 'book';
+          else if (route.name === 'Profile') iconName = 'user';
+
+          return <Feather name={iconName} size={size} color={color} />;
+        },
+        tabBarStyle: {
+          backgroundColor: 'black',
+        },
+      })}
     >
       <Tab.Screen
         name="Home"
