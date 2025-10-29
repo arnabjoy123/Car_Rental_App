@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { mockLogin, mockSignup } from '../../services/apiService';
+import { MMKV } from 'react-native-mmkv';
+
+export const storage = new MMKV();
 
 // Async thunks
 export const loginUser = createAsyncThunk(
@@ -24,19 +27,42 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   return { loggedIn: false, user: null, expiresAt: null };
 });
 
-// Slice
-const authSlice = createSlice({
-  name: 'auth',
-  initialState: {
+export const loadUserFromStorage = () => {
+  const loggedIn = storage.getString('loggedIn');
+  const user = storage.getString('user');
+  const expiresAt = storage.getString('expiresAt');
+
+  if (loggedIn && user) {
+    return {
+      loggedIn: true,
+      user: JSON.parse(user),
+      expiresAt: Number(expiresAt),
+      loading: false,
+      error: null,
+    };
+  }
+
+  return {
     loggedIn: false,
     user: null,
     expiresAt: null,
     loading: false,
     error: null,
+  };
+};
+
+// Slice
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: loadUserFromStorage(),
+  reducers: {
+    hydrate: (state, action) => {
+      return { ...state, ...action.payload };
+    },
   },
-  reducers: {},
   extraReducers: builder => {
     builder
+
       // Login
       .addCase(loginUser.pending, state => {
         state.loading = true;
@@ -47,6 +73,12 @@ const authSlice = createSlice({
         state.loggedIn = action.payload.loggedIn;
         state.user = action.payload.user;
         state.expiresAt = action.payload.expiresAt;
+
+        //////////////
+
+        storage.set('loggedIn', 'true');
+        storage.set('user', JSON.stringify(action.payload.user));
+        storage.set('expiresAt', String(action.payload.expiresAt));
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -63,6 +95,12 @@ const authSlice = createSlice({
         state.loggedIn = action.payload.loggedIn;
         state.user = action.payload.user;
         state.expiresAt = action.payload.expiresAt;
+
+        //////////////////////////
+
+        storage.set('loggedIn', 'true');
+        storage.set('user', JSON.stringify(action.payload.user));
+        storage.set('expiresAt', String(action.payload.expiresAt));
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
@@ -76,8 +114,14 @@ const authSlice = createSlice({
         state.expiresAt = null;
         state.error = null;
         state.loading = false;
+
+        //////////////////
+
+        storage.clearAll();
       });
   },
 });
+
+export const { hydrate } = authSlice.actions;
 
 export default authSlice.reducer;
