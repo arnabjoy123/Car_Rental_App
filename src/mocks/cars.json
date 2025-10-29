@@ -1,0 +1,258 @@
+[
+  {
+    "id": 1,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 2,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 3,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 4,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 5,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 6,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 7,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 8,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 9,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 10,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 11,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 12,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 13,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 14,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  },
+  {
+    "id": 15,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": 50,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636390/model1_1-removebg-preview_ymwrbh.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636410/model1_2-removebg-preview_ufa1he.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636422/model1_3-removebg-preview_nejxvk.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636434/model1_4-removebg-preview_xwhqu8.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761636446/model1_5-removebg-preview_pwpmyb.png"
+    ],
+    "seats": 5,
+    "transmission": "Automatic"
+  },
+  {
+    "id": 16,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2021,
+    "pricePerDay": 55,
+    "images": [
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_1_ipsc06.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652795/model2_2_ehfqke.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_3_gcl6ez.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_4_szy3m2.png",
+      "https://res.cloudinary.com/dhyw5pljz/image/upload/v1761652794/model2_5_zh5gqw.png"
+    ],
+    "seats": 5,
+    "transmission": "Manual"
+  }
+]

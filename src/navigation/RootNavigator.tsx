@@ -1,21 +1,25 @@
 // src/navigation/RootNavigator.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabNavigator from './TabNavigator';
-import Onboarding from '../screens/Onboarding';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppStack } from './AppNavigator';
+import { AuthStack } from './AuthNavigator';
+import {
+  hydrate,
+  loadUserFromStorage,
+  storage,
+} from '../store/slices/authSlice';
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
-  return (
-    <Stack.Navigator
-      initialRouteName="Onboarding"
-      screenOptions={{
-        headerShown: false, // hide header for all stack screens by default
-      }}
-    >
-      <Stack.Screen name="Onboarding" component={Onboarding} />
-      <Stack.Screen name="MainTabs" component={TabNavigator} />
-    </Stack.Navigator>
-  );
+  const dispatch = useDispatch();
+  const { loggedIn } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    const persistedState = loadUserFromStorage();
+    dispatch(hydrate(persistedState));
+  }, [dispatch]);
+
+  return loggedIn ? <AppStack /> : <AuthStack />;
 }
