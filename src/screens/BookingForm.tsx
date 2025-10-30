@@ -1,5 +1,3 @@
-'use client';
-
 import {
   View,
   Text,
@@ -9,6 +7,7 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -39,6 +38,24 @@ const BookingForm = () => {
     const diffTime = dropDate - pickupDate;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 0;
     return diffDays > 0 ? diffDays * ratePerDay : 0;
+  };
+
+  const handleProceedToPayment = () => {
+    if (!pickupLocation || !dropLocation) {
+      Alert.alert('Please fill in all booking details');
+      return;
+    }
+
+    const bookingData = {
+      car,
+      pickupLocation,
+      dropLocation,
+      pickupDate: pickupDate.toISOString(),
+      dropDate: dropDate.toISOString(),
+      totalCost: getTotalCost(),
+    };
+
+    navigation.navigate('PaymentScreen', { bookingData });
   };
 
   return (
@@ -219,7 +236,11 @@ const BookingForm = () => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={handleProceedToPayment}
+        >
           <Text style={styles.buttonText}>Confirm Booking</Text>
           <Text style={styles.buttonArrow}>→</Text>
         </TouchableOpacity>
