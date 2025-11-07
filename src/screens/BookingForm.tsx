@@ -9,11 +9,13 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MapView, { Marker } from 'react-native-maps';
 import DatePicker from 'react-native-date-picker';
+import VoiceAssistantButton from '../components/VoiceAssistantButton';
+import { OPENAI_API_KEY } from '@env';
 
 const BookingForm = () => {
   const route = useRoute();
@@ -26,6 +28,7 @@ const BookingForm = () => {
 
   const [pickupDate, setPickupDate] = useState(new Date());
   const [dropDate, setDropDate] = useState(new Date());
+
   const [openPickup, setOpenPickup] = useState(false);
   const [openDrop, setOpenDrop] = useState(false);
   const [pickupLocation, setPickupLocation] = useState('');
@@ -34,8 +37,19 @@ const BookingForm = () => {
 
   const ratePerDay = 50;
 
+  const handleDatesDetected = ({ pickup, drop }) => {
+    console.log("hii inside handle")
+    console.log('pickup sds', JSON.stringify(pickup));
+    console.log('drop', JSON.stringify(drop));
+    if (pickup) setPickupDate(pickup);
+    if (drop) setDropDate(drop);
+  };
+
   const getTotalCost = () => {
     const diffTime = dropDate - pickupDate;
+    console.log(dropDate.toLocaleDateString());
+    console.log(JSON.stringify(pickupDate));
+    console.log(diffTime);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 0;
     return diffDays > 0 ? diffDays * ratePerDay : 0;
   };
@@ -69,6 +83,7 @@ const BookingForm = () => {
       >
         <View style={styles.header}>
           <Text style={styles.subtitle}>Complete Your Booking</Text>
+           <Text style={{color:"white"}}>ENV Key: {OPENAI_API_KEY ? 'Loaded ✅' : 'Not Loaded ❌'}</Text>
           <Text style={styles.title}>
             {car.make} {car.model}
           </Text>
@@ -256,6 +271,8 @@ const BookingForm = () => {
             <Text style={styles.footerLink}>Go back to details</Text>
           </TouchableOpacity>
         </View>
+
+        <VoiceAssistantButton onDatesDetected={handleDatesDetected} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
