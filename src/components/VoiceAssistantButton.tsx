@@ -25,10 +25,13 @@ import { OPENAI_API_KEY } from '@env';
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 const chrono = require('chrono-node');
 
-export default function VoiceAssistantButton({ onDatesDetected }) {
+export default function VoiceAssistantButton({
+  onDatesDetected,
+  loading,
+  setLoading,
+}) {
   const [listening, setListening] = useState(false);
   const [animValue] = useState(new Animated.Value(1));
-
   useEffect(() => {
     // 🟢 Register event listeners
     const resultListener = addEventListener('onSpeechResults', event => {
@@ -111,6 +114,7 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
 
   const handleResults = async speech => {
     try {
+      setLoading(true);
       console.log('raw:', speech);
       const text = (speech || '').toLowerCase().trim();
       console.log('Final recognized text:', text);
@@ -119,8 +123,8 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
       console.log('Chrono parsed:', dates);
 
       // // ----------------- CASE 1: One date + duration (e.g., "book on 10th for 2 days")
-      if (dates.length >1) {
-        console.log("Case: date + duration logic");
+      if (dates.length > 1 && text.includes('for')) {
+        console.log('Case: date + duration logic');
 
         const durationMatch = text.match(/for (\d+) (day|days|week|weeks)/);
         if (durationMatch) {
@@ -128,10 +132,17 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
           const unit = durationMatch[2];
           const startDate = dates[0].start.date();
           const endDate = new Date(startDate);
-          if (unit.startsWith("day")) endDate.setDate(startDate.getDate() + num);
-          if (unit.startsWith("week")) endDate.setDate(startDate.getDate() + num * 7);
+          if (unit.startsWith('day'))
+            endDate.setDate(startDate.getDate() + num);
+          if (unit.startsWith('week'))
+            endDate.setDate(startDate.getDate() + num * 7);
 
-          console.log("Pickup:", startDate.toLocaleDateString(), "Drop:", endDate.toLocaleDateString());
+          console.log(
+            'Pickup:',
+            startDate.toLocaleDateString(),
+            'Drop:',
+            endDate.toLocaleDateString(),
+          );
           onDatesDetected({ pickup: startDate, drop: endDate });
           stopVoiceRecognition();
           return;
@@ -139,7 +150,7 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
       }
 
       // // ----------------- CASE 2: Single start-end range (e.g., "from 10th to 12th")
-      if (dates.length === 1) {
+      if (dates.length === 1 && dates[0].end) {
         console.log('Case: direct range logic');
 
         const pickup = dates[0].start.date();
@@ -155,7 +166,7 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
         return;
       }
       // // ----------------- LAST CASE: Fallback to OpenAI
-      console.log("No valid dates detected, falling back to OpenAI...");
+      console.log('No valid dates detected, falling back to OpenAI...');
 
       const prompt = `
     Extract the start and end date (or duration) for a car booking request in natural language.
@@ -211,6 +222,7 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
     } catch (error) {
       console.error('handleResults error:', error);
     } finally {
+      setLoading(false);
       stopVoiceRecognition();
     }
   };

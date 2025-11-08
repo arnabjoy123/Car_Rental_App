@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -21,6 +22,7 @@ const BookingForm = () => {
   const route = useRoute();
   const { car } = route.params;
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [openMap, setOpenMap] = useState(false);
   const [dropMap, setDropMap] = useState(false);
 
@@ -38,7 +40,7 @@ const BookingForm = () => {
   const ratePerDay = 50;
 
   const handleDatesDetected = ({ pickup, drop }) => {
-    console.log("hii inside handle")
+    console.log('hii inside handle');
     console.log('pickup sds', JSON.stringify(pickup));
     console.log('drop', JSON.stringify(drop));
     if (pickup) setPickupDate(pickup);
@@ -83,7 +85,7 @@ const BookingForm = () => {
       >
         <View style={styles.header}>
           <Text style={styles.subtitle}>Complete Your Booking</Text>
-           <Text style={{color:"white"}}>ENV Key: {OPENAI_API_KEY ? 'Loaded ✅' : 'Not Loaded ❌'}</Text>
+          {/* <Text style={{color:"white"}}>ENV Key: {OPENAI_API_KEY ? 'Loaded ✅' : 'Not Loaded ❌'}</Text> */}
           <Text style={styles.title}>
             {car.make} {car.model}
           </Text>
@@ -272,8 +274,18 @@ const BookingForm = () => {
           </TouchableOpacity>
         </View>
 
-        <VoiceAssistantButton onDatesDetected={handleDatesDetected} />
+        <VoiceAssistantButton
+          onDatesDetected={handleDatesDetected}
+          loading={loading}
+          setLoading={setLoading}
+        />
       </ScrollView>
+
+      {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#002043ff" />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -281,6 +293,12 @@ const BookingForm = () => {
 export default BookingForm;
 
 const styles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // fills entire screen
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.25)', // transparent background
+  },
   container: {
     flex: 1,
     backgroundColor: 'black',
