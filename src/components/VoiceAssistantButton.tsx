@@ -19,9 +19,8 @@ import {
 } from '@ascendtis/react-native-voice-to-text';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import OpenAI from "openai";
+import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '@env';
-
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 const chrono = require('chrono-node');
@@ -110,230 +109,111 @@ export default function VoiceAssistantButton({ onDatesDetected }) {
     }
   };
 
-  // const handleResults = async(speech) => {
-  //   console.log("raw: ", speech)
-  //   const text = (speech || '').toLowerCase();
-  //   console.log('Final recognized text:', text);
+  const handleResults = async speech => {
+    try {
+      console.log('raw:', speech);
+      const text = (speech || '').toLowerCase().trim();
+      console.log('Final recognized text:', text);
 
-  //   const dates = chrono.parse(text);
-  //   console.log(dates);
+      const dates = chrono.parse(text);
+      console.log('Chrono parsed:', dates);
 
-  //   if (dates.length > 1) {
-  //     console.log("hii combine logic")
-  //     const pickup = dates[0].start.date();
-  //     const durationMatch = dates[1].text.match(/for (\d+) (day|days|week|weeks)/);
-      
-  //     console.log(durationMatch)
+      // // ----------------- CASE 1: One date + duration (e.g., "book on 10th for 2 days")
+      if (dates.length >1) {
+        console.log("Case: date + duration logic");
 
-  //     const num = parseInt(durationMatch[1]);
-  //     const unit = durationMatch[2];
+        const durationMatch = text.match(/for (\d+) (day|days|week|weeks)/);
+        if (durationMatch) {
+          const num = parseInt(durationMatch[1]);
+          const unit = durationMatch[2];
+          const startDate = dates[0].start.date();
+          const endDate = new Date(startDate);
+          if (unit.startsWith("day")) endDate.setDate(startDate.getDate() + num);
+          if (unit.startsWith("week")) endDate.setDate(startDate.getDate() + num * 7);
 
+          console.log("Pickup:", startDate.toLocaleDateString(), "Drop:", endDate.toLocaleDateString());
+          onDatesDetected({ pickup: startDate, drop: endDate });
+          stopVoiceRecognition();
+          return;
+        }
+      }
 
-  //     const endDate = new Date(pickup);
-  //     console.log(pickup.toLocaleDateString())
-  //     console.log(endDate.toLocaleDateString())
-  //     if (unit.startsWith('day')) endDate.setDate(pickup.getDate() + num);
-  //     if (unit.startsWith('week')) endDate.setDate(pickup.getDate() + num * 7);
-  //     console.log(endDate.toLocaleDateString())
-  //     onDatesDetected({ pickup, drop: endDate });
+      // // ----------------- CASE 2: Single start-end range (e.g., "from 10th to 12th")
+      if (dates.length === 1) {
+        console.log('Case: direct range logic');
 
-  //   }
-  //   if (dates.length === 1 && text.includes("for")) {
-  //     console.log("enter the new logic")
-  //     const durationMatch = text.match(/for (\d+) (day|days|week|weeks)/);
-  //     console.log(durationMatch)
-  //     if (durationMatch) {
-  //       const num = parseInt(durationMatch[1]);
-  //       const unit = durationMatch[2];
-  //       console.log(num)
-  //       console.log(unit)
-  //       const startDate = dates[0].start.date();
-  //       const endDate = new Date(startDate);
-  //       console.log(startDate.toLocaleDateString())
-  //       console.log(endDate.toLocaleDateString())
-  //       if (unit.startsWith('day')) endDate.setDate(startDate.getDate() + num);
-  //       if (unit.startsWith('week')) endDate.setDate(startDate.getDate() + num * 7);
-  //       console.log(endDate.toLocaleDateString())
-  //       onDatesDetected({ pickup: startDate, drop: endDate });
+        const pickup = dates[0].start.date();
+        const drop = dates[0].end ? dates[0].end.date() : pickup;
+        console.log(
+          'Pickup:',
+          pickup.toLocaleDateString(),
+          'Drop:',
+          drop.toLocaleDateString(),
+        );
+        onDatesDetected({ pickup, drop });
+        stopVoiceRecognition();
+        return;
+      }
+      // // ----------------- LAST CASE: Fallback to OpenAI
+      console.log("No valid dates detected, falling back to OpenAI...");
 
-  //     }
-  //   }
-  //   else if (dates.length > 0 && !text.includes("for")) {
-  //     console.log("enter the old logic")
-
-  //     const pickup = dates[0].start.date();
-  //     const drop = dates[0].end.date();
-
-  //     console.log('hii1');
-
-  //     console.log(pickup.toLocaleDateString());
-  //     console.log(drop.toLocaleDateString());
-  //     onDatesDetected({ pickup, drop });
-  //   } else {
-  //      console.log("No valid dates detected, falling back to OpenAI...");
-  //       const prompt = `
-  //       Extract the start and end date (or duration) for a booking request in natural language.
-  //       Today's date is ${new Date().toDateString()}.
-  //       Return result in JSON format: { "pickup": "YYYY-MM-DD", "drop": "YYYY-MM-DD" }.
-  //       Input: "${text}"
-  //       `;
-  //       console.log("HEyoooo1")
-
-  //       const response = await openai.chat.completions.create({
-  //         model: "gpt-4o-mini",
-  //         messages: [{ role: "user", content: prompt }],
-  //       });
-
-  //       console.log("HEyoooo")
-  //       const resultText = response.choices[0].message.content;
-  //       console.log("AI result:", resultText);
-
-  //       try {
-  //         const { pickup, drop } = JSON.parse(resultText);
-  //         onDatesDetected({
-  //           pickup: new Date(pickup),
-  //           drop: new Date(drop),
-  //         });
-  //       } catch (err) {
-  //         console.error("Failed to parse AI result", err);
-  //       }
-  //   }
-
-  //   stopVoiceRecognition();
-  // };
-
-  const handleResults = async (speech) => {
-  try {
-    console.log("raw:", speech);
-    const text = (speech || "").toLowerCase().trim();
-    console.log("Final recognized text:", text);
-
-    const dates = chrono.parse(text);
-    console.log("Chrono parsed:", dates);
-
-    // // ----------------- CASE 1: Two date expressions (e.g., "from 10th to 12th" or "on 10th for 3 days")
-    // if (dates.length > 1) {
-    //   console.log("Case: combine logic");
-
-    //   const pickup = dates[0].start.date();
-    //   const durationMatch = dates[1].text.match(/for (\d+) (day|days|week|weeks)/);
-
-    //   let endDate;
-    //   if (durationMatch) {
-    //     const num = parseInt(durationMatch[1]);
-    //     const unit = durationMatch[2];
-    //     endDate = new Date(pickup);
-    //     if (unit.startsWith("day")) endDate.setDate(pickup.getDate() + num);
-    //     if (unit.startsWith("week")) endDate.setDate(pickup.getDate() + num * 7);
-    //   } else if (dates[1].end) {
-    //     endDate = dates[1].end.date();
-    //   } else {
-    //     endDate = dates[1].start.date();
-    //   }
-
-    //   console.log("Pickup:", pickup.toLocaleDateString(), "Drop:", endDate.toLocaleDateString());
-    //   onDatesDetected({ pickup, drop: endDate });
-    //   stopVoiceRecognition();
-    //   return;
-    // }
-
-    // // ----------------- CASE 2: One date + duration (e.g., "book on 10th for 2 days")
-    // if (dates.length === 1 && text.includes("for")) {
-    //   console.log("Case: date + duration logic");
-
-    //   const durationMatch = text.match(/for (\d+) (day|days|week|weeks)/);
-    //   if (durationMatch) {
-    //     const num = parseInt(durationMatch[1]);
-    //     const unit = durationMatch[2];
-    //     const startDate = dates[0].start.date();
-    //     const endDate = new Date(startDate);
-    //     if (unit.startsWith("day")) endDate.setDate(startDate.getDate() + num);
-    //     if (unit.startsWith("week")) endDate.setDate(startDate.getDate() + num * 7);
-
-    //     console.log("Pickup:", startDate.toLocaleDateString(), "Drop:", endDate.toLocaleDateString());
-    //     onDatesDetected({ pickup: startDate, drop: endDate });
-    //     stopVoiceRecognition();
-    //     return;
-    //   }
-    // }
-
-    // // ----------------- CASE 3: Single start-end range (e.g., "from 10th to 12th")
-    // if (dates.length > 0 && !text.includes("for")) {
-    //   console.log("Case: direct range logic");
-
-    //   const pickup = dates[0].start.date();
-    //   const drop = dates[0].end ? dates[0].end.date() : pickup;
-    //   console.log("Pickup:", pickup.toLocaleDateString(), "Drop:", drop.toLocaleDateString());
-    //   onDatesDetected({ pickup, drop });
-    //   stopVoiceRecognition();
-    //   return;
-    // }
-    // // ----------------- CASE 4: Fallback to OpenAI
-    // console.log("No valid dates detected, falling back to OpenAI...");
-
-    const prompt = `
+      const prompt = `
     Extract the start and end date (or duration) for a car booking request in natural language.
     Today's date is ${new Date().toDateString()}.
     Return ONLY JSON: { "pickup": "YYYY-MM-DD", "drop": "YYYY-MM-DD" }.
     Input: "${text}"
     `;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`, // ensure key is valid and accessible
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${OPENAI_API_KEY}`, // ensure key is valid and accessible
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
+          }),
+        },
+      );
 
-    const data = await response.json();
-    console.log("AI raw result:", data);
+      const data = await response.json();
+      console.log('AI raw result:', data);
 
-    const resultText = data?.choices?.[0]?.message?.content;
-    if (resultText) {
+      const resultText = data?.choices?.[0]?.message?.content;
+      if (resultText) {
+        try {
+          const cleaned = resultText
+            .replace(/```json/i, '') // remove ```json
+            .replace(/```/g, '') // remove ```
+            .replace(/[\n\r]/g, '') // remove newlines
+            .trim();
 
+          // 🧠 Find JSON substring if AI wrapped it in explanation
+          const jsonMatch = cleaned.match(/\{.*\}/s);
+          const jsonStr = jsonMatch ? jsonMatch[0] : cleaned;
 
+          // ✅ Parse safely
+          const { pickup, drop } = JSON.parse(jsonStr);
 
-      try {
-      // 🧹 Clean any markdown or extra text around the JSON
-      const cleaned = resultText
-        .replace(/```json/i, "")   // remove ```json
-        .replace(/```/g, "")       // remove ```
-        .replace(/[\n\r]/g, "")    // remove newlines
-        .trim();
-
-      // 🧠 Find JSON substring if AI wrapped it in explanation
-      const jsonMatch = cleaned.match(/\{.*\}/s);
-      const jsonStr = jsonMatch ? jsonMatch[0] : cleaned;
-
-      // ✅ Parse safely
-      const { pickup, drop } = JSON.parse(jsonStr);
-
-      onDatesDetected({
-        pickup: new Date(pickup),
-        drop: new Date(drop),
-      });
-    } catch (err) {
-      console.error("❌ Failed to parse AI result", err, resultText);
+          onDatesDetected({
+            pickup: new Date(pickup),
+            drop: new Date(drop),
+          });
+        } catch (err) {
+          console.error('❌ Failed to parse AI result', err, resultText);
+        }
+      } else {
+        console.warn('No valid response from AI.');
+      }
+    } catch (error) {
+      console.error('handleResults error:', error);
+    } finally {
+      stopVoiceRecognition();
     }
-
-
-
-
-    } else {
-      console.warn("No valid response from AI.");
-    }
-  } catch (error) {
-    console.error("handleResults error:", error);
-  } finally {
-    stopVoiceRecognition();
-  }
-};
-
+  };
 
   return (
     <Animated.View
