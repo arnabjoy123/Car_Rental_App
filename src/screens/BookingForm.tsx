@@ -16,7 +16,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MapView, { Marker } from 'react-native-maps';
 import DatePicker from 'react-native-date-picker';
 import VoiceAssistantButton from '../components/VoiceAssistantButton';
-import { OPENAI_API_KEY } from '@env';
+import { GEO_API } from '@env';
 
 const BookingForm = () => {
   const route = useRoute();
@@ -45,6 +45,42 @@ const BookingForm = () => {
     console.log('drop', JSON.stringify(drop));
     if (pickup) setPickupDate(pickup);
     if (drop) setDropDate(drop);
+  };
+
+  const handlePickupLocation = (lat, long) => {
+    console.log('hii');
+    var requestOptions = {
+      method: 'GET',
+    };
+
+    fetch(
+      `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${long}&apiKey=${GEO_API}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log('result: ', result);
+        setPickupLocation(result.features[0].properties.formatted);
+      })
+      .catch(error => console.log('error', error));
+  };
+
+  const handleDropLocation = (lat, long) => {
+    console.log('hiidrop');
+    var requestOptions = {
+      method: 'GET',
+    };
+
+    fetch(
+      `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${long}&apiKey=${GEO_API}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log('result drop: ', result);
+        setDropLocation(result.features[0].properties.formatted);
+      })
+      .catch(error => console.log('error', error));
   };
 
   const getTotalCost = () => {
@@ -85,7 +121,6 @@ const BookingForm = () => {
       >
         <View style={styles.header}>
           <Text style={styles.subtitle}>Complete Your Booking</Text>
-          {/* <Text style={{color:"white"}}>ENV Key: {OPENAI_API_KEY ? 'Loaded ✅' : 'Not Loaded ❌'}</Text> */}
           <Text style={styles.title}>
             {car.make} {car.model}
           </Text>
@@ -100,7 +135,15 @@ const BookingForm = () => {
               styles.locationField,
               openMap && styles.locationFieldActive,
             ]}
-            onPress={() => setOpenMap(prev => !prev)}
+            onPress={() => {
+              if (openMap) {
+                setOpenMap(false);
+              } else {
+                setOpenMap(true);
+              }
+
+              setDropMap(false);
+            }}
           >
             <EvilIcons name="location" size={24} color="white" />
             <TextInput
@@ -126,11 +169,14 @@ const BookingForm = () => {
                 }}
                 onPress={e => {
                   setMarker(e.nativeEvent.coordinate);
-                  setPickupLocation(
-                    `${e.nativeEvent.coordinate.latitude.toFixed(
-                      2,
-                    )}, ${e.nativeEvent.coordinate.longitude.toFixed(2)}`,
+
+                  handlePickupLocation(
+                    e.nativeEvent.coordinate.latitude,
+                    e.nativeEvent.coordinate.longitude,
                   );
+                  // setPickupLocation(
+                  //   `${e.nativeEvent.coordinate.latitude}, ${e.nativeEvent.coordinate.longitude}`,
+                  // );
                 }}
               >
                 {marker && (
@@ -149,7 +195,14 @@ const BookingForm = () => {
               styles.locationField,
               openMap && styles.locationFieldActive,
             ]}
-            onPress={() => setDropMap(prev => !prev)}
+            onPress={() => {
+              if (dropMap) {
+                setDropMap(false);
+              } else {
+                setDropMap(true);
+              }
+              setOpenMap(false);
+            }}
           >
             <EvilIcons name="location" size={24} color="white" />
             <TextInput
@@ -175,11 +228,15 @@ const BookingForm = () => {
                 }}
                 onPress={e => {
                   setMarker(e.nativeEvent.coordinate);
-                  setDropLocation(
-                    `${e.nativeEvent.coordinate.latitude.toFixed(
-                      2,
-                    )}, ${e.nativeEvent.coordinate.longitude.toFixed(2)}`,
+
+                  handleDropLocation(
+                    e.nativeEvent.coordinate.latitude,
+                    e.nativeEvent.coordinate.longitude,
                   );
+
+                  // setDropLocation(
+                  //   `${e.nativeEvent.coordinate.latitude}, ${e.nativeEvent.coordinate.longitude}`,
+                  // );
                 }}
               >
                 {marker && (
@@ -196,7 +253,11 @@ const BookingForm = () => {
           <View style={styles.dateRow}>
             <TouchableOpacity
               style={styles.dateField}
-              onPress={() => setOpenPickup(true)}
+              onPress={() => {
+                setDropMap(false);
+                setOpenMap(false);
+                setOpenPickup(true);
+              }}
             >
               <Text style={styles.dateLabel}>Pickup</Text>
               <Text style={styles.dateValue}>
@@ -206,7 +267,11 @@ const BookingForm = () => {
 
             <TouchableOpacity
               style={styles.dateField}
-              onPress={() => setOpenDrop(true)}
+              onPress={() => {
+                setDropMap(false);
+                setOpenMap(false);
+                setOpenDrop(true);
+              }}
             >
               <Text style={styles.dateLabel}>Return</Text>
               <Text style={styles.dateValue}>
@@ -283,7 +348,7 @@ const BookingForm = () => {
 
       {loading && (
         <View style={styles.overlay}>
-          <ActivityIndicator size="large" color="#002043ff" />
+          <ActivityIndicator size={34} color="#ffffffff" />
         </View>
       )}
     </KeyboardAvoidingView>
